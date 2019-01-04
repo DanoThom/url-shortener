@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UrlShortener.Domain.Aggregates.UrlAggregate;
+using UrlShortener.Infrastructure.Services;
 using UrlShortener.WebApi.Dtos;
 using UrlShortener.WebApi.Exceptions;
 using UrlShortener.WebApi.Pages;
@@ -16,11 +17,14 @@ namespace UrlShortener.WebApi.Commands {
         private readonly IUrlRepository _urlRepository;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly IShortUrlService _shortUrlService;
 
-        public ShortenUrlCommandHandler(IUrlRepository urlRepository, IMediator mediator, IMapper mapper) {
+        public ShortenUrlCommandHandler(IUrlRepository urlRepository, IMediator mediator, IMapper mapper,
+            IShortUrlService shortUrlService) {
             _urlRepository = urlRepository;
             _mediator = mediator;
             _mapper = mapper;
+            _shortUrlService = shortUrlService;
         }
 
         public async Task<UrlDto> Handle(ShortenUrlCommand request, CancellationToken cancellationToken) {
@@ -28,19 +32,27 @@ namespace UrlShortener.WebApi.Commands {
             var validUrl = Uri.IsWellFormedUriString(request.Url, UriKind.Absolute);
             if (!validUrl) throw new InvalidUrlException("Please enter a valid url");
 
-            var dbUrl = await _mediator.Send(new GetUrlFromLongUrlQuery(request.Url));
+            // clean incoming long url
+            var longUrl = request.Url.Replace("http://", "").Replace("https://", "").Replace("www.", "");
+             
+            var dbUrl = await _mediator.Send(new GetUrlFromLongUrlQuery(longUrl));
 
             if(dbUrl != null) {
-                return _mapper.Map<UrlDto>(dbUrl);
+                var dbUrlDto = _mapper.Map<UrlDto>(dbUrl);
+                dbUrlDto.LongUrl = "https://" + dbUrl.LongUrl;
+                return dbUrlDto;
             }
 
-            var url = new Url(request.Url);
-
+            var url = new Url(longUrl);
             _urlRepository.Add(url);
-            url.SetShortUrl();
-            
+
+            var shortUrl = _shortUrlService.GetShortUrl(longUrl);
+            url.SetShortUrl(shortUrl);
+
             await _urlRepository.UnitOfWork.SaveEntitiesAsync();
-            return _mapper.Map<UrlDto>(url);
+            var urlDto = _mapper.Map<UrlDto>(url);
+            urlDto.LongUrl = "https://" + urlDto.LongUrl;
+            return urlDto;
         }
     }
 }

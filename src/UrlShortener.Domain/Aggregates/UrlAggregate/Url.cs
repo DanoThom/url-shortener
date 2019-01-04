@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using UrlShortener.Domain.Services;
 using UrlShortener.Domain.Shared;
 
 namespace UrlShortener.Domain.Aggregates.UrlAggregate
@@ -29,9 +28,9 @@ namespace UrlShortener.Domain.Aggregates.UrlAggregate
             CreatedOn = DateTimeOffset.UtcNow;
         }
 
-        public void SetShortUrl() {
-            ShortUrl = ShortUrlService.Encode(Id);
-            if(_urlDetails == null) {
+        public void SetShortUrl(string shortUrl) {
+            ShortUrl = shortUrl;
+            if (_urlDetails == null && Id > 0) {
                 _urlDetails = new UrlDetails(Id);
             }
         }

@@ -13,9 +13,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using UrlShortener.Domain.Aggregates.UrlAggregate;
 using UrlShortener.Infrastructure.Contexts;
 using UrlShortener.Infrastructure.Repositories;
+using UrlShortener.Infrastructure.Services;
 
 namespace UrlShortener.WebApi
 {
@@ -40,9 +42,13 @@ namespace UrlShortener.WebApi
             services.AddAutoMapper();
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(options => {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
 
             services.AddScoped<IUrlRepository, UrlRepository>();
+            services.AddScoped<IShortUrlService, ShortUrlService>();
 
             services.AddEntityFrameworkSqlServer()
                    .AddDbContext<UrlShortenerContext>(options => {

@@ -32,7 +32,10 @@ namespace UrlShortener.WebApi.Commands {
             _urlRepository.Update(url);
             
             await _urlRepository.UnitOfWork.SaveEntitiesAsync();
-            return _mapper.Map<UrlDto>(url);
+
+            var urlDto = _mapper.Map<UrlDto>(url);
+            urlDto.LongUrl = "https://" + urlDto.LongUrl;
+            return urlDto;
         }
     }
 }
