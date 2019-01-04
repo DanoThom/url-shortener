@@ -5,12 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace UrlShortener.WebApi.Pages
-{
-    public class PrivacyModel : PageModel
-    {
-        public void OnGet()
-        {
+namespace UrlShortener.WebApi.Pages {
+    public class PrivacyModel : PageModel {
+        public void OnGet() {
         }
     }
 }

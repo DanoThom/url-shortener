@@ -11,5 +11,6 @@ namespace UrlShortener.Domain.Aggregates.UrlAggregate
         Url Add(Url url);
         void Update(Url url);
         Task<Url> GetAsync(int urlId);
+        Task<Url> GetAsync(string shortUrl);
     }
 }

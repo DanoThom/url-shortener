@@ -36,14 +36,10 @@ namespace UrlShortener.Domain.Aggregates.UrlAggregate
             }
         }
 
-        public void AddNewUrlAccess()
-        {
-            _urlRequests.Add(new UrlRequest(Id));
-        }
-
-        public void IncreaseUrlRequestCount()
+        public void AddNewUrlRequest()
         {
             _urlDetails.IncreateRequestCount();
+            _urlRequests.Add(new UrlRequest(Id));
         }
     }
 }

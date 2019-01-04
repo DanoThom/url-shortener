@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortener.WebApi.Commands;
+using UrlShortener.WebApi.Exceptions;
 
-namespace UrlShortener.WebApi.Controllers
-{
+namespace UrlShortener.WebApi.Controllers {
+
     [ApiController]
-    public class UrlsController : ControllerBase
-    {
+    public class UrlsController : ControllerBase {
         private readonly IMediator _mediator;
 
         public UrlsController(IMediator mediator) {
@@ -19,17 +16,32 @@ namespace UrlShortener.WebApi.Controllers
         }
 
         [HttpGet]
-        [Route("api/")]
-        public IActionResult GetLongUrl(string shortUrl)
-        {
-            return RedirectPermanent("https://www.google.com");
+        [Route("/{shortUrl}")]
+        public async Task<IActionResult> RedirectShortUrl(string shortUrl) {
+            try {
+                var url = await _mediator.Send(new ProcessRequestCommand(shortUrl));
+                return Redirect(url.LongUrl);
+            }
+            catch (UrlNotFoundException ex) {
+                return NotFound(ex.Message);
+            }
+            catch(Exception ex) {
+                return BadRequest(ex);
+            }
         }
-
+        
         [HttpPost]
         [Route("api/shortenUrl")]
-        public async Task<IActionResult> ShortenUrl([FromBody] ShortenUrlCommand command)
-        {
-            return Ok(await _mediator.Send(command));
+        public async Task<IActionResult> ShortenUrl([FromBody] ShortenUrlCommand command) {
+            try {
+                return Ok(await _mediator.Send(command));
+            }
+            catch (InvalidUrlException ex) {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex) {
+                return BadRequest(ex);
+            }
         }
     }
 }

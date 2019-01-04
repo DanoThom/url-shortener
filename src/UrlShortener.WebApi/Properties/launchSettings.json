@@ -18,6 +18,7 @@
     "UrlShortener.WebApi": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "Main",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

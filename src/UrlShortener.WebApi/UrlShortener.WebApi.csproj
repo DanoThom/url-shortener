@@ -2,22 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <UserSecretsId>72aeb96c-c3bb-4dd6-9570-fc9e9345cf2e</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Infrastructure\Migrations\20190103225917_InitialMigration.cs" />
-    <Compile Remove="Infrastructure\Migrations\20190103225917_InitialMigration.Designer.cs" />
-    <Compile Remove="Infrastructure\Migrations\20190103230211_InitialMigration.cs" />
-    <Compile Remove="Infrastructure\Migrations\20190103230211_InitialMigration.Designer.cs" />
-    <Compile Remove="Infrastructure\Migrations\20190103231741_InitialMigration.cs" />
-    <Compile Remove="Infrastructure\Migrations\20190103231741_InitialMigration.Designer.cs" />
-    <Compile Remove="Infrastructure\Migrations\20190103232603_InitialMigration.cs" />
-    <Compile Remove="Infrastructure\Migrations\20190103232603_InitialMigration.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="8.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="MediatR" Version="6.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="6.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
@@ -34,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\UrlShortener.Infrastructure\UrlShortener.Infrastructure.csproj" />
+    <ProjectReference Include="..\UrlShortener.Domain\UrlShortener.Domain.csproj" />
+    <ProjectReference Include="..\UrlShortener.Infrastructure\UrlShortener.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

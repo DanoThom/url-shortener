@@ -9,13 +9,13 @@ using UrlShortener.WebApi.Dtos;
 namespace UrlShortener.WebApi.Commands {
 
     [DataContract]
-    public class ShortenUrlCommand : IRequest<UrlDto> {
+    public class ProcessRequestCommand : IRequest<UrlDto> {
 
         [DataMember]
-        public string Url { get; private set; }
+        public string ShortUrl { get; private set; }
 
-        public ShortenUrlCommand(string url) {
-            Url = url;
+        public ProcessRequestCommand(string shortUrl) {
+            ShortUrl = shortUrl;
         }
     }
 }
