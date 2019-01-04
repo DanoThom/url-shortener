@@ -1,0 +1,101 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Main Page";
+}
+
+<div class="row">
+    <div class="col">
+        <h3>Enter URL to shorten: </h3>
+        <form>
+            @Html.AntiForgeryToken()
+            <fieldset>
+                <input id="shorten-url" taborder="1" name="url" type="url" class="shorten-input" placeholder="Paste a link to shorten it" value="" autocomplete="off" autocorrect="off" autocapitalize="off">
+                <input id="shorten-btn" type="button" class="btn button-primary button-large shorten-button" value="Shorten">
+            </fieldset>
+        </form>
+        <div id="msg">
+
+        </div>
+    </div>
+</div>
+
+
+@*@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            var options = {};
+            options.url = "/api/values";
+            options.type = "GET";
+            options.dataType = "json";
+            options.success = function (data) {
+
+                data.forEach(function (element) {
+                    $("#result").append("<h3>" + element + "</h3>");
+                });
+            };
+            options.error = function () {
+                $("#msg").html("Error while calling the Web API!");
+            };
+            $.ajax(options);
+        });
+
+
+    </script>
+}*@
+
+@section scripts{
+    <script>
+        $(function () {
+            $('#shorten-btn').on('click', function (evt) {
+                evt.preventDefault();
+
+                //var options = {};
+                //options.url = "/api/shortenUrl";
+                //options.type = "POST";
+
+                ////options.data = $('form').serialize();
+                //var obj = {};
+                ////obj.url = encodeURIComponent($("#shorten-url").val());
+                //obj.url = $("#shorten-url").val();
+                //options.data = JSON.stringify(obj);
+                //options.contentType = "application/json";
+                //options.dataType = "json";
+
+                //options.beforeSend = function (xhr) {
+                //    xhr.setRequestHeader("MY-XSRF-TOKEN",
+                //        $('input:hidden[name="__RequestVerificationToken"]').val());
+                //};
+                //options.success = function (msg) {
+                //    $("#msg").html(msg);
+                //};
+                //options.error = function (err) {
+                //    $("#msg").html("Error while making Ajax call!");
+                //};
+                //$.ajax(options);
+
+                var obj = {};
+                obj.url = $("#shorten-url").val();
+
+                $.ajax({
+                    url: "/api/shortenUrl",
+                    type: "POST",
+                    data: JSON.stringify(obj),
+                    contentType: "application/json",
+                    //dataType: "json",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("MY-XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    }
+                })
+                .done(function (data) {
+                    $("#msg").html(data);
+                })
+                .fail(function (xhr) {
+                    $("#msg").html("Error while making Ajax call!");
+                });
+            });
+        });
+    </script>
+}
