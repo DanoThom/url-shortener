@@ -3,15 +3,71 @@
 
 <h3>ShortUrl Statistics for <em>@Model.UrlModel.ShortUrl</em></h3>
 
-<div class="card w-75">
+<div class="card">
     <h5 class="card-header bg-primary text-white">@Model.UrlModel.LongUrl </h5>
     <div class="card-body">
         <div class="form-row">
-            <h5 class="col-md-2">Created On</h5> 
+            <h5 class="col-md-2">Created On</h5>
             <p class="col-md-4 font-italic"> @Model.UrlModel.CreatedOn</p>
-        </div> 
+        </div>
         <h5 class="card-title">Visited <em>@Model.UrlModel.RequestCount</em> times</h5>
 
         <a href="https://@Model.UrlModel.LongUrl" class="short-url">@Model.UrlModel.LongUrl</a>
     </div>
 </div>
+
+<div class="pt-3">
+    <canvas id="requestChart" width="400" height="400"></canvas>
+</div>
+
+@section scripts{
+    <script>
+        function getRandomColor() {
+            var letters = '0123456789ABCDEF'.split('');
+            var color = '#';
+            for (var i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function getRandomColorForEachBar(count) {
+            var data = [];
+            for (var i = 0; i < count; i++) {
+                data.push(getRandomColor());
+            }
+            return data;
+        }
+
+        var data = JSON.parse('@Json.Serialize(@Model.ChartData)');
+        var labels = data.map(function (r) {
+            return r.date;
+        });
+        var requestData = data.map(function (r) {
+            return r.count;
+        });
+
+        var ctx = document.getElementById("requestChart").getContext('2d');
+        var requestChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '# of Requests per day',
+                    data: requestData,
+                    backgroundColor: getRandomColorForEachBar(labels.length),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+}
