@@ -61,6 +61,8 @@ namespace UrlShortener.WebApi
                        ServiceLifetime.Scoped
                    );
 
+            services.BuildServiceProvider().GetService<UrlShortenerContext>().Database.Migrate();
+
             services.AddAntiforgery(options =>
                 options.HeaderName = "MY-XSRF-TOKEN");
         }
