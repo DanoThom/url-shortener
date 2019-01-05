@@ -32,13 +32,16 @@ namespace UrlShortener.Infrastructure.Repositories {
 
         public async Task<Url> GetAsync(string shortUrl) {
             return await _context.Urls
-                .Include(i => i.UrlRequests)
                 .Include(i => i.UrlDetails)
                 .SingleOrDefaultAsync(x => x.ShortUrl == shortUrl);
         }
 
         public void Update(Url url) {
             _context.Entry(url).State = EntityState.Modified;
+        }
+
+        public async Task InsertShortUrlRequest(int urlId) {
+            await _context.UrlRequests.AddAsync(new UrlRequest(urlId));
         }
     }
 }

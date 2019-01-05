@@ -30,11 +30,12 @@ namespace UrlShortener.WebApi.Commands {
         public async Task<UrlDto> Handle(ShortenUrlCommand request, CancellationToken cancellationToken) {
             // Extra server url validation
             var validUrl = Uri.IsWellFormedUriString(request.Url, UriKind.Absolute);
-            if (!validUrl) throw new InvalidUrlException("Please enter a valid url");
+            bool result = Uri.TryCreate(request.Url, UriKind.Absolute, out Uri uri) && (uri.Scheme == "http" || uri.Scheme == "https");
+            if (!validUrl || !result) throw new InvalidUrlException("Please enter a valid url");
 
             // clean incoming long url
-            var longUrl = request.Url.Replace("http://", "").Replace("https://", "").Replace("www.", "");
-             
+            var longUrl = uri.Host.ToLower().Replace("www.", "") + (uri.PathAndQuery);
+
             var dbUrl = await _mediator.Send(new GetUrlFromLongUrlQuery(longUrl));
 
             if(dbUrl != null) {

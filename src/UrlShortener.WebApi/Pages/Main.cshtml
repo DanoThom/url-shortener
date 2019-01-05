@@ -1,8 +1,5 @@
 ﻿@page
 @model IndexModel
-@{
-    ViewData["Title"] = "Main Page";
-}
 
 <div class="justify-content-center">
     <form class="pt-3" id="shortenUrlForm">
@@ -17,7 +14,11 @@
         </div>
 
     </form>
+    <div class="row justify-content-center">
+        <span class="col-md-8 text-danger" id="msg">
 
+        </span>
+    </div>
     <div class="row justify-content-center">
         <div class="col-md-8 short-url" id="result">
 
@@ -30,7 +31,9 @@
     <script>
         $(document).ready(function () {
 
-            $('#shortenUrlForm').on('submit', function (evt) {
+            $("#shortenUrlForm").on("submit", function (evt) {
+                $("#msg").html("");
+
                 if (!this.checkValidity()) {
                     evt.preventDefault();
                     evt.stopPropagation();
@@ -38,7 +41,6 @@
                 }
 
                 evt.preventDefault();
-
                 $(this).addClass('was-validated');
 
                 var obj = {};
@@ -49,7 +51,6 @@
                     type: "POST",
                     data: JSON.stringify(obj),
                     contentType: "application/json",
-                    //dataType: "json",
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader("MY-XSRF-TOKEN",
                             $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -57,10 +58,22 @@
                 })
                     .done(function (data) {
                         var url = document.location.origin + "/" + data.shortUrl;
-                        $("#result").append('<div class="card"><div class="card-header"><span><strong>' + data.longUrl + '</strong></span></div><div class="card-body"><a href=' + url + '>' + url + '</a></div></div>');
+                        $("#result").prepend(`
+                            <div class="card">
+                                <div class="card-header">
+                                    <span><strong>` + data.longUrl + `</strong></span>
+                                </div>
+                                <div class="card-body">
+                                    <a href=` + url + `>` + url + `</a>
+                                    <a class="float-right text-secondary" href=` + url + `/stats>stats</a>
+                                </div>
+                            </div>`);
+
+                        $("#shorten-url").removeClass('is-invalid');
                     })
                     .fail(function (xhr) {
-                        $("#result").html("Error shortening url. Please try again.");
+                        $("#shorten-url").addClass('is-invalid');
+                        $("#msg").html(xhr.responseText);
                     });
             });
 

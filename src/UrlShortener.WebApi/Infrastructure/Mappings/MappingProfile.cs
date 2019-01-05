@@ -10,7 +10,8 @@ namespace UrlShortener.WebApi.Infrastructure.Mappings {
     public class MappingProfile : Profile {
 
         public MappingProfile() {
-            CreateMap<Url, UrlDto>();
+            CreateMap<Url, UrlDto>()
+                .ForMember(d => d.RequestCount, c => c.MapFrom(s => s.UrlDetails == null ? 0 : s.UrlDetails.RequestCount));
         }
     }
 }

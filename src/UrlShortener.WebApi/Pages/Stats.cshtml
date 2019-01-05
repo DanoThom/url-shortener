@@ -1,0 +1,17 @@
+﻿@page "/{shortUrl}/stats"
+@model StatsModel
+
+<h3>ShortUrl Statistics for <em>@Model.UrlModel.ShortUrl</em></h3>
+
+<div class="card w-75">
+    <h5 class="card-header bg-primary text-white">@Model.UrlModel.LongUrl </h5>
+    <div class="card-body">
+        <div class="form-row">
+            <h5 class="col-md-2">Created On</h5> 
+            <p class="col-md-4 font-italic"> @Model.UrlModel.CreatedOn</p>
+        </div> 
+        <h5 class="card-title">Visited <em>@Model.UrlModel.RequestCount</em> times</h5>
+
+        <a href="https://@Model.UrlModel.LongUrl" class="short-url">@Model.UrlModel.LongUrl</a>
+    </div>
+</div>
