@@ -33,6 +33,7 @@
 
             $("#shortenUrlForm").on("submit", function (evt) {
                 $("#msg").html("");
+                $(this).removeClass('was-validated');
 
                 if (!this.checkValidity()) {
                     evt.preventDefault();
