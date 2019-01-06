@@ -6,6 +6,9 @@
 
 * Hosted on an [Azure](portal.azure.com) Web App using an Azure SQL Database
 
+#### Dependencies
+* Requires [.Net Core 2.2](https://dotnet.microsoft.com/download/dotnet-core/2.2)
+
 #### Notes
 * To work around the fact of not having 2 hosted service domains, navigate to <domain>/Main in order to use the website.
 That way generated shortUrls can still use the shorter index route.
