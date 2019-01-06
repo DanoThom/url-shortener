@@ -4,11 +4,15 @@
 
 An example project for a url shortening service.
 
-Hosted on an [Azure](https://portal.azure.com) Web App using an Azure SQL Database.
+Hosted on an [Azure](https://portal.azure.com) Web App using an Azure SQL Database and Azure Redis Cache.
 
 ## Dependencies
 
 Requires [.Net Core 2.2](https://dotnet.microsoft.com/download/dotnet-core/2.2)
+
+(Optional) Redis Cache
+- For local development you can enable the cache in the config and then emulate a local redis cache by installing and running the [MSOpenTech](https://github.com/MicrosoftArchive/redis/releases) version of redis-server.exe.
+
 
 ## Notes
 
