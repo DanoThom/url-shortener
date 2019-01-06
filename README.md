@@ -2,6 +2,8 @@
 
 [![Build Status](https://dev.azure.com/danothom10/UrlShortener/_apis/build/status/url-shortener-app%20-%20CI?branchName=master)](https://dev.azure.com/danothom10/UrlShortener/_build/latest?definitionId=2?branchName=master)
 
+### [GitHub](https://github.com/DanoThom/url-shortener)
+
 An example project for a url shortening service.
 
 Hosted on an [Azure](https://portal.azure.com) Web App using an Azure SQL Database and Azure Redis Cache.
