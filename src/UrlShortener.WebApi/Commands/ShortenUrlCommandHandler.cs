@@ -34,7 +34,7 @@ namespace UrlShortener.WebApi.Commands {
             if (!validUrl || !result) throw new InvalidUrlException("Please enter a valid url");
 
             // clean incoming long url
-            var longUrl = uri.Host.ToLower().Replace("www.", "") + (uri.PathAndQuery);
+            var longUrl = uri.Host.ToLower().Replace("www.", "") + "/" + (uri.Fragment);
 
             var dbUrl = await _mediator.Send(new GetUrlFromLongUrlQuery(longUrl));
 

@@ -20,11 +20,6 @@ namespace UrlShortener.WebApi.Commands {
         }
 
         public async Task<UrlDto> Handle(ProcessRequestCommand request, CancellationToken cancellationToken) {
-            //var exists = await _mediator.Send(new CheckShortUrlExistsQuery(request.ShortUrl));
-            //if(!exists) {
-            //    throw new UrlNotFoundException($"No url found for short url '{request.ShortUrl}'");
-            //}
-
             var url = await _urlRepository.GetAsync(request.ShortUrl);
             if (url == null || url.Id == 0) {
                 throw new UrlNotFoundException($"No url found for short url '{request.ShortUrl}'");
