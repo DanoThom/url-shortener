@@ -25,9 +25,6 @@ namespace UrlShortener.WebApi.Controllers {
             catch (UrlNotFoundException ex) {
                 return NotFound(ex.Message);
             }
-            catch(Exception ex) {
-                return BadRequest(ex);
-            }
         }
         
         [HttpPost]
@@ -38,9 +35,6 @@ namespace UrlShortener.WebApi.Controllers {
             }
             catch (InvalidUrlException ex) {
                 return BadRequest(ex.Message);
-            }
-            catch (Exception ex) {
-                return BadRequest(ex);
             }
         }
     }

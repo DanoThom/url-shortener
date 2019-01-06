@@ -1,26 +1,22 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using StackExchange.Redis;
 using UrlShortener.Domain.Aggregates.UrlAggregate;
 using UrlShortener.Infrastructure.Contexts;
 using UrlShortener.Infrastructure.Repositories;
 using UrlShortener.Infrastructure.Services;
 
-namespace UrlShortener.WebApi
-{
+namespace UrlShortener.WebApi {
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -49,6 +45,18 @@ namespace UrlShortener.WebApi
 
             services.AddScoped<IUrlRepository, UrlRepository>();
             services.AddScoped<IShortUrlService, ShortUrlService>();
+
+            if (Configuration.GetValue<bool>("UseRedisCache")) {
+                var url = Configuration.GetValue<string>("RedisCacheUrl");
+                if (!string.IsNullOrWhiteSpace(url)) {
+                    services.AddSingleton<ConnectionMultiplexer>(sp => {
+                        var configuration = ConfigurationOptions.Parse(url, true);
+                        configuration.ResolveDns = true;
+
+                        return ConnectionMultiplexer.Connect(configuration);
+                    });
+                }
+            }
 
             services.AddEntityFrameworkSqlServer()
                    .AddDbContext<UrlShortenerContext>(options => {

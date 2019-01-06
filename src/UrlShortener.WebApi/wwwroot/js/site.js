@@ -61,7 +61,7 @@
                 })
                 .fail(function (xhr) {
                     $("#shorten-url").addClass('is-invalid');
-                    $("#msg").html(xhr.responseText);
+                    $("#msg").html("Please enter a valid url.");
                 });
         });
 
