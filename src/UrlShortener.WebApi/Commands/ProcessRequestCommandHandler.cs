@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using UrlShortener.Domain.Aggregates.UrlAggregate;
 using UrlShortener.WebApi.Dtos;
 using UrlShortener.WebApi.Exceptions;
-using UrlShortener.WebApi.Queries;
 
 namespace UrlShortener.WebApi.Commands {
     public class ProcessRequestCommandHandler : IRequestHandler<ProcessRequestCommand, UrlDto> {
@@ -26,10 +25,9 @@ namespace UrlShortener.WebApi.Commands {
             }
 
             url.AddNewUrlRequest();
+
             _urlRepository.Update(url);
 
-            await _urlRepository.InsertShortUrlRequest(url.Id);
-            
             await _urlRepository.UnitOfWork.SaveEntitiesAsync();
 
             var urlDto = _mapper.Map<UrlDto>(url);

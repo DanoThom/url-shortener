@@ -38,7 +38,15 @@ namespace UrlShortener.Domain.Aggregates.UrlAggregate
         public void AddNewUrlRequest()
         {
             _urlDetails.IncreateRequestCount();
-            //_urlRequests.Add(new UrlRequest(Id));
+            _urlRequests.Add(new UrlRequest(Id));
+        }
+
+        public void SetId(int id) {
+            Id = id;
+        }
+
+        public void SetUrlDetails(UrlDetails urlDetails) {
+            _urlDetails = urlDetails;
         }
     }
 }

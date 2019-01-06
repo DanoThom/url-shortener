@@ -37,7 +37,7 @@ namespace UrlShortener.Infrastructure.Repositories {
         }
 
         public void Update(Url url) {
-            _context.Entry(url).State = EntityState.Modified;
+            _context.Update(url);
         }
 
         public async Task InsertShortUrlRequest(int urlId) {
