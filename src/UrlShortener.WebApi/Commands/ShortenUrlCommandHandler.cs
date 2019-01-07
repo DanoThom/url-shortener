@@ -85,7 +85,7 @@ namespace UrlShortener.WebApi.Commands {
             if (!validUrl || !result) throw new InvalidUrlException("Please enter a valid url");
 
             // clean incoming long url
-            var longUrl = uri.Host.ToLower().Replace("www.", "") + "/" + (string.IsNullOrWhiteSpace(uri.Fragment) ? uri.PathAndQuery : uri.Fragment);
+            var longUrl = uri.Host.ToLower().Replace("www.", "") + (string.IsNullOrWhiteSpace(uri.Fragment) ? uri.PathAndQuery : "/" + uri.Fragment);
             return longUrl;
         }
 
