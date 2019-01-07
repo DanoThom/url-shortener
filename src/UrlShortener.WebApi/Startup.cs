@@ -52,7 +52,6 @@ namespace UrlShortener.WebApi {
                     services.AddSingleton<ConnectionMultiplexer>(sp => {
                         var configuration = ConfigurationOptions.Parse(url, true);
                         configuration.ResolveDns = true;
-
                         return ConnectionMultiplexer.Connect(configuration);
                     });
                 }
